@@ -43,12 +43,39 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+  <plugins>
+    <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-maven-plugin</artifactId>
+    </plugin>
+
+    <plugin>
+      <groupId>com.microsoft.azure</groupId>
+      <artifactId>azure-webapp-maven-plugin</artifactId>
+      <version>2.11.0</version>
+      <configuration>
+        <resourceGroup>intregration</resourceGroup>
+        <appName>intregrations</appName>
+        <region>westeurope</region> <!-- or your Azure region -->
+        <runtime>
+          <os>linux</os>
+          <javaVersion>Java 17</javaVersion>
+          <webContainer>JAVA</webContainer>
+        </runtime>
+        <deployment>
+          <resources>
+            <resource>
+              <directory>${project.basedir}/target</directory>
+              <includes>
+                <include>*.jar</include>
+              </includes>
+            </resource>
+          </resources>
+        </deployment>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
+
 
 </project>
