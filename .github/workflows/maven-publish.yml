@@ -32,18 +32,18 @@ jobs:
           name: springboot-example
           path: ${{ env.POM_XML_DIRECTORY }}/target/*.jar
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download Artifact from Build Job
-        uses: actions/download-artifact@v4
-        with:
-          name: springboot-example
+ deploy:
+  runs-on: ubuntu-latest
+  needs: build
+  steps:
+    - name: Download Artifact from Build Job
+      uses: actions/download-artifact@v4
+      with:
+        name: springboot-example
 
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'intregrations'  # Your Azure App Service name
-          publish-profile: ${{ secrets.azurewebAppPublishProfile }}
-          package: '*.jar'
+    - name: Deploy to Azure App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'your-app-service-name'  # Replace with the correct Azure App Service name
+        publish-profile: ${{ secrets.azurewebAppPublishProfile }}
+        package: '*.jar'
