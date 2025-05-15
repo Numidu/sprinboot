@@ -5,8 +5,8 @@ on:
     branches: ["main"]
 
 env:
-  AZURE_FUNCTIONAPP_NAME: 'intregrations'   # Optional if deploying to Azure App Service
-  POM_XML_DIRECTORY: '.'                    # Location of pom.xml
+  AZURE_WEBAPP_NAME: 'intregrations'        # Your Azure App Service name
+  POM_XML_DIRECTORY: '.'                    # Directory containing pom.xml
   DISTRIBUTION: 'temurin'                   # Java distribution
   JAVA_VERSION: '17'                        # Java version
 
@@ -17,7 +17,7 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v3
 
-      - name: Setup JAVA
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: ${{ env.DISTRIBUTION }}
@@ -27,7 +27,7 @@ jobs:
         run: mvn -B clean install -DskipTests
 
       - name: Upload Artifact for Deployment
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: springboot-example
           path: ${{ env.POM_XML_DIRECTORY }}/target/*.jar
@@ -37,13 +37,13 @@ jobs:
     needs: build
     steps:
       - name: Download Artifact from Build Job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: springboot-example
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'intregrations'  # Name of your Azure App Service
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.azurewebAppPublishProfile }}
           package: '*.jar'
